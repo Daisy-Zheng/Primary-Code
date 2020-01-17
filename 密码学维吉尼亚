@@ -1,0 +1,71 @@
+import numpy as np
+def importdata(filename):
+    line = []
+    with open(filename, 'r') as f:
+        line = f.readline()
+        return line
+C=importdata('C:/Users/TEST/PycharmProjects/cyptography/C2.txt')
+print(C)
+
+#find the length of the secret key应该要对每个分组都算，然后求平均
+def findt(C):
+    t=1
+    while t<30:
+        temp=[];freq=[];Pr=0
+        for i in  range(337):
+            if i*t<=336:
+                temp.append(C[i*t])
+        n=len(temp)
+        for i in range(26):
+            freq.append([chr(i+ord('A')),temp.count(chr(i+ord('A')))])
+        for j in freq:
+            Pr+=j[1]*(j[1]-1)/(n*(n-1))
+        if abs(Pr-0.065)<0.005:
+            break
+        t+=1
+    return t
+t=findt(C)
+print(t)
+
+p=[8.2,1.5,2.8,4.3,12.7,2.2,2,6.1,7,0.2,0.8,4,2.4,6.7,7.5,1.9,0.1,6,6.3,9.1,2.8,1,2.3,0.2,2,0.1]
+#divide ciphertext into t groups
+def group(i,t):
+    prop=[]
+    y=C[i::t]
+    for j in range(26):
+        prop.append(y.count(chr(j+ord('A')))/len(y))#calculate the fraquency of each letter in each group
+    return y,prop
+
+#calculate sum(p_i*q_{i+k})
+def findk(m,t):
+    k=0;temp=[]
+    y,prop=group(m,t)
+    print(prop)
+    while k<=25:
+        pr=0
+        for i in range(26):
+            pr+= (p[i]*0.01*prop[(i+k)%26])
+        temp.append([abs(pr-0.065),k])
+        temp.sort(key=lambda ele:(ele[0],ele[1]),reverse=False)#find k_i by selecting the smallest abs(pr-0.065)
+        k+=1
+    return temp[0][1]
+k=[]
+for i in range(6):
+    k.append(findk(i,t))
+print(k)
+
+
+
+# Dec(k,C)
+def Dec(k,C):
+    i=0;D=[]
+    while i <= 336:
+        if 64<ord(C[i])-k[i%6]<91:
+           D.append(chr(ord(C[i])-k[i%6]))
+        else:
+            D.append(chr(ord(C[i])-k[i%6]+26))
+        i+=1
+    return D
+
+D=Dec(k,C)
+print(' '.join(D))
