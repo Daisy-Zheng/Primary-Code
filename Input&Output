@@ -1,0 +1,30 @@
+#sample 1
+n=int(input())
+pack=[]
+for i in range(3):
+    pack.append(input().split())
+print(n)
+print(pack)
+//Input
+57
+2 2
+50 30
+30 27
+//Output
+57
+[['2', '2'], ['50', '30'], ['30', '27']]
+//
+
+#sample 2
+s = map(int,input().split())
+s=list(s)
+print(s)
+OR
+num1 = [int(n) for n in input().split()]
+//Input
+100 200 150 140 129 134 167 198 200 111
+//Output
+[100, 200, 150, 140, 129, 134, 167, 198, 200, 111]
+
+#sample 3
+
