@@ -1,0 +1,30 @@
+n,k=input().split()
+n=int(n)
+k=int(k)
+list_B=[int(i) for i in input().split()]
+list_B.sort()
+
+def search_func(mid,list_B,k,n):
+    i=0;num=0
+    size=2*n*k
+    while num < n:
+        if  i > 2 * k*num:
+             return False
+        if (list_B[i+1]-list_B[i])<= mid:
+            num+=1
+            i+=1
+        i+=1
+    return True
+
+def findmax_func(n,list_B,k):
+    l=0; r=list_B[2*n*k-1]
+    while l<r:
+        mid=(l+r)>>1
+        if search_func(mid,list_B,k,n)==True:
+            r=mid
+        else:
+            l=mid+1
+    return l
+
+max=findmax_func(n,list_B,k)
+print(max)
